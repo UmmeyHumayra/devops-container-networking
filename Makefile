@@ -7,7 +7,7 @@ ROUTER_NS1_IP = 192.168.1.1
 ROUTER_NS2_IP = 192.168.2.1
 NETMASK = 24
 
-all: system_prerequisits create_net_br create_ns create_vifs_conn config_ips setup_routing iptables_rule iptables_rules ping
+all: system_prerequisits create config_ips setup_routing iptables_rules ping
 
 system_prerequisits:
 	sudo apt update && sudo apt upgrade -y

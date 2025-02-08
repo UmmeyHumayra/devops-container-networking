@@ -11,7 +11,7 @@ all: system_prerequisits create_net_br create_ns create_vifs_conn config_ips set
 
 system_prerequisits:
 	sudo apt update && sudo apt upgrade -y
-    sudo apt install iproute2 net-tools tcpdump -y
+	sudo apt install iproute2 net-tools tcpdump -y
 
 create:
 	# network bridges
@@ -29,14 +29,14 @@ create:
 	sudo ip link add vr-ns1-ns type veth peer name vr-ns1
 	sudo ip link add v-ns2-ns type veth peer name v-ns2
 	sudo ip link add vr-ns2-ns type veth peer name vr-ns2
-    sudo ip link set v-ns1-ns netns ns1
-    sudo ip link set v-ns2-ns netns ns2
-    sudo ip link set vr-ns1-ns netns router-ns
-    sudo ip link set vr-ns2-ns netns router-ns
+	sudo ip link set v-ns1-ns netns ns1
+	sudo ip link set v-ns2-ns netns ns2
+	sudo ip link set vr-ns1-ns netns router-ns
+	sudo ip link set vr-ns2-ns netns router-ns
 	sudo ip link set v-ns1 master br1
-    sudo ip link set vr-ns1 master br1
-    sudo ip link set v-ns2 master br2
-    sudo ip link set vr-ns2 master br2
+	sudo ip link set vr-ns1 master br1
+	sudo ip link set v-ns2 master br2
+	sudo ip link set vr-ns2 master br2
 	sudo ip link set v-ns1 up
 	sudo ip link set vr-ns1 up
 	sudo ip link set v-ns2 up

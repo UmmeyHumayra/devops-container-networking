@@ -56,6 +56,9 @@ setup_routing:
 	sudo ip netns exec ns1 ip route add default via $(ROUTER_NS1_IP)
 	sudo ip netns exec ns2 ip route add default via $(ROUTER_NS2_IP)
 	sudo sysctl -w net.ipv4.ip_forward=1
+	sudo ip netns exec ns1 route
+	sudo ip netns exec ns2 route
+	sudo ip netns exec router-ns route 
 
 iptables_rules: # these FW rules may or may not be needed, depends on the FW rules in the linux system
 	sudo iptables --append FORWARD --in-interface br1 --jump ACCEPT
@@ -65,9 +68,13 @@ iptables_rules: # these FW rules may or may not be needed, depends on the FW rul
 
 ping: 
 	sudo ip netns exec ns1 ping $(ROUTER_NS1_IP) -c 2
-	sudo ip netns exec ns2 ping $(ROUTER_NS2_IP) -c 2
 	sudo ip netns exec router-ns ping $(NS1_IP) -c 2
+	sudo ip netns exec ns1 ping $(ROUTER_NS2_IP) -c 2
+	sudo ip netns exec ns1 ping $(NS2_IP) -c 2
+	sudo ip netns exec ns2 ping $(ROUTER_NS2_IP) -c 2
 	sudo ip netns exec router-ns ping $(NS2_IP) -c 2
+	sudo ip netns exec ns2 ping $(ROUTER_NS1_IP) -c 2
+	sudo ip netns exec router-ns ping $(NS1_IP) -c 2
 
 clean:
 	sudo ip netns del ns1

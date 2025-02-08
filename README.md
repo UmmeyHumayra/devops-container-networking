@@ -1,2 +1,6 @@
-# devops-container-networking
-This repo track the progress in the poridhi networking progress and codes
+# Linux Network Namespace Simulation Assignment
+
+## Main Objective: 
+We are going to create a network simulation with two separate networks connected via a router using Linus network namespaces and bridges. 
+
+## Network Topology

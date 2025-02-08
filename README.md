@@ -136,11 +136,12 @@ ummey_poney@test-instace-good-to-delete:~/fib-lab$
 ```
 ### 7. Enable and Test Connectivity
 Now we want to test connectivity using by pinging from veth interface to veth interfaces in router-ns and ns2 namespaces.
-![alt text](image-1.png)
-
+![alt text](image-3.png)
+\
 Similarly, successful ping will indicate that veth interfaces of router-ns and ns1 are also able to connect with veth interfaces of ns2 namespace. 
 
-Let's take a look at the arp table for these namespaces. ARP table shows the mapping between the IP Addresses and MAC addresses for interfaces. 
+Let's take a look at the arp table for these namespaces. ARP table shows the mapping between the IP Addresses and MAC addresses for interfaces.\ 
+
 ![alt text](image.png)
 
 It is important to note that when I was using poridhi lab environment for the assignment, I had to add firewall rule into the host system's IP Tables to establish connectivity and get successfull ICMP reply messages. I added the following FW rules: 

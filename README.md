@@ -11,7 +11,7 @@ Let's breakdown the objective into smaller tasks and accomplish the simulation.
 
 We will start with system readiness and install the tools that we may (or may not) need to verify connectivity.
 
-### Install system pre-requisites
+### 1. Install system pre-requisites
 
 ```
 sudo apt update && sudo apt upgrade -y
@@ -19,7 +19,7 @@ sudo apt install iproute2 net-tools tcpdump -y
 sudo apt install build-essential
 ```
 
-### Create network bridges
+### 2. Create network bridges
 We are going to create br1 and br2 virtual bridges. Router namespaces will connect to two different namespaces using these 2 bridges. 
 
 ```
@@ -43,7 +43,7 @@ Verify that the bridges have been created and turned "up" using `sudo ip link li
 35: br2: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
     link/ether e2:4c:1b:da:30:54 brd ff:ff:ff:ff:ff:ff
 ```
-### Create network namespaces
+### 3. Create network namespaces
 We are going to create three network namespaces - ns1, ns2 and router-ns. 
 ```
 sudo ip netns add ns1
@@ -57,7 +57,7 @@ router-ns
 ns2
 ns1
 ```
-### Create virtual interfaces and connections
+### 4. Create virtual interfaces and connections
 First we are going to create 4 virtual ethernet links. These veth link pairs are:\
 `v-ns1-ns` in ns1 <---- to ---> `v-ns1` in br1 \
 `vr-ns1-ns` in router-ns <---- to ---> `vr-ns1` in br1 \
@@ -88,7 +88,7 @@ sudo ip link set vr-ns1 up
 sudo ip link set v-ns2 up
 sudo ip link set vr-ns2 up
 ```
-### Configure IP Addresses
+### 5. Configure IP Addresses
 As mentioned in the topology, we are going to assign IP addresses from 192.168.1.0/24 network to veth interfaces in ns1 and router-ns. For ns2 and router-ns connectivity we are going to use 192.168.2.0/24 network. 
 ```
 sudo ip netns exec ns1 ip link set v-ns1-ns up
@@ -104,7 +104,7 @@ sudo ip netns exec router-ns ip addr add 192.168.1.1/24 dev vr-ns1-ns
 sudo ip netns exec router-ns ip link set vr-ns2-ns up
 sudo ip netns exec router-ns ip addr add 192.168.2.1/24 dev vr-ns2-ns
 ```
-### Setup routing
+### 6. Setup routing
 Now, we want to configure the default routes within ns1 and ns2 namespaces. This routing information will allow the veth interfaces in these namespaces to forward traffic through correct interface.
 ```
 sudo ip netns exec ns1 ip route add default via 192.168.1.1
@@ -134,7 +134,7 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 192.168.2.0     0.0.0.0         255.255.255.0   U     0      0        0 vr-ns2-ns
 ummey_poney@test-instace-good-to-delete:~/fib-lab$
 ```
-### Enable and Test Connectivity
+### 7. Enable and Test Connectivity
 Now we want to test connectivity using by pinging from veth interface to veth interfaces in router-ns and ns2 namespaces.
 ![alt text](image-1.png)
 
@@ -152,7 +152,7 @@ sudo iptables --append FORWARD --out-interface br2 --jump ACCEPT
 ``` 
 However, I did not need these FW rules when I tested in Google Compute Engine.
 
-### Clean up
+### 8. Clean up
 At the end of the testing we want to do some cleanup. Using the following commands we can delete the namespaces and virtual interfaces. 
 ```
 sudo ip netns del ns1
